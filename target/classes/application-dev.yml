@@ -1,0 +1,22 @@
+﻿spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:XE
+    username: inspeccion_user
+    password: inspeccion_pass
+
+  flyway:
+    enabled: true
+
+services:
+  territorial:
+    url: http://localhost:8081
+
+security:
+  jwt:
+    secret: dev-secret-key-inspeccion-fitosanitaria-2024
+
+logging:
+  level:
+    inspeccion: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    org.springframework.jdbc.core.StatementCreatorUtils: TRACE

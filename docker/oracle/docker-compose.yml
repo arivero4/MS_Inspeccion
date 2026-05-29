@@ -1,0 +1,57 @@
+﻿version: "3.8"
+
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    container_name: oracle-inspecciones
+    environment:
+      ORACLE_PWD: OraclePass123
+      ORACLE_CHARACTERSET: AL32UTF8
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+      - ../../src/main/resources/db/scripts/init-oracle.sql:/docker-entrypoint-initdb.d/01-init.sql
+    networks:
+      - ms-network
+    healthcheck:
+      test: ["CMD", "sqlplus", "-L", "sys/OraclePass123@//localhost:1521/XE as sysdba", "< /dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+
+  ms-inspecciones:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    container_name: ms-inspecciones-app
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_USERNAME: inspeccion_user
+      DB_PASSWORD: inspeccion_pass
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@oracle-db:1521:XE
+      TERRITORIAL_URL: http://ms-territorial:8081
+      JWT_SECRET: clave-secreta-jwt-inspeccion-fitosanitaria-produccion-2024
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    networks:
+      - ms-network
+
+volumes:
+  oracle_data:
+    driver: local
+
+networks:
+  ms-network:
+    driver: bridge
+
+# NOTA: Oracle 10g no tiene imagen Docker oficial.
+# Este compose usa Oracle XE 21.3 que es retrocompatible para conexiones JDBC.
+# Para Oracle 10g real, usar ojdbc14.jar local y conectarse a instancia existente.
+# Configurar en application-dev.yml:
+#   spring.datasource.url: jdbc:oracle:thin:@<host>:<puerto>:<SID>

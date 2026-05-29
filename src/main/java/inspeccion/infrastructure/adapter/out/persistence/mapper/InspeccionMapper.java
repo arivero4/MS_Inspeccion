@@ -13,6 +13,5 @@ public interface InspeccionMapper {
     @Mapping(target = "detalles", ignore = true)
     InspeccionFitosanitaria entityToDomain(InspeccionEntity entity);
 
-    @Mapping(target = "detalles", ignore = true)
     InspeccionEntity domainToEntity(InspeccionFitosanitaria domain);
 }

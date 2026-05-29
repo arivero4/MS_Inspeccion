@@ -41,7 +41,12 @@ public class JwtAuthenticationAdapter {
 
     public List<String> extraerRoles(String token) {
         Claims claims = extraerClaims(token);
-        Object roles = claims.get("roles");
+        // El JWT de ms-usuarios almacena los grupos en el claim "grupos"
+        // Intentamos "grupos" primero, luego "roles" como fallback
+        Object roles = claims.get("grupos");
+        if (roles == null) {
+            roles = claims.get("roles");
+        }
         if (roles instanceof List<?>) {
             return ((List<?>) roles).stream()
                     .filter(String.class::isInstance)

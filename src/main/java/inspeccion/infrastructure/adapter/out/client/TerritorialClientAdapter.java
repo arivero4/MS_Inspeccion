@@ -25,7 +25,7 @@ public class TerritorialClientAdapter implements TerritorialClientPort {
     @Override
     public Optional<LoteInfo> buscarLotePorId(Long idLote) {
         try {
-            String url = territorialUrl + "/api/v1/lotes/" + idLote;
+            String url = territorialUrl + "/api/territorial/lotes/" + idLote;
             LoteClientResponse response = restTemplate.getForObject(url, LoteClientResponse.class);
             return Optional.ofNullable(response).map(this::toLoteInfo);
         } catch (HttpClientErrorException.NotFound e) {
@@ -45,7 +45,7 @@ public class TerritorialClientAdapter implements TerritorialClientPort {
     @Override
     public Optional<LoteInfo> buscarLotePorCodigo(String codigoLote) {
         try {
-            String url = territorialUrl + "/api/v1/lotes/codigo/" + codigoLote;
+            String url = territorialUrl + "/api/territorial/lotes/codigo/" + codigoLote;
             LoteClientResponse response = restTemplate.getForObject(url, LoteClientResponse.class);
             return Optional.ofNullable(response).map(this::toLoteInfo);
         } catch (HttpClientErrorException.NotFound e) {

@@ -15,7 +15,7 @@ public class OracleDataSourceConfig {
 
     @Bean
     @Primary
-    @ConfigurationProperties("spring.datasource")
+    @ConfigurationProperties("spring.datasource.hikari")
     public DataSource dataSource() {
         log.info("Inicializando DataSource Oracle con HikariCP");
         return DataSourceBuilder.create().build();

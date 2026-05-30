@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-29T21:20:00-0500",
+    date = "2026-05-30T11:37:14-0500",
     comments = "version: 1.6.3, compiler: javac, environment: Java 24.0.2 (Oracle Corporation)"
 )
 @Component
@@ -31,10 +31,10 @@ public class DetalleInspeccionWebMapperImpl implements DetalleInspeccionWebMappe
         DetalleInspeccion.DetalleInspeccionBuilder detalleInspeccion = DetalleInspeccion.builder();
 
         detalleInspeccion.totalPlantas( request.getTotalPlantas() );
+        detalleInspeccion.idLote( request.getIdLote() );
         detalleInspeccion.nombreCultivo( request.getNombreCultivo() );
         detalleInspeccion.areaInspeccionada( request.getAreaInspeccionada() );
         detalleInspeccion.plantasMuestreadas( request.getPlantasMuestreadas() );
-        detalleInspeccion.resultado( request.getResultado() );
         detalleInspeccion.observaciones( request.getObservaciones() );
 
         return detalleInspeccion.build();
@@ -49,6 +49,7 @@ public class DetalleInspeccionWebMapperImpl implements DetalleInspeccionWebMappe
         DetalleInspeccionResponse.DetalleInspeccionResponseBuilder detalleInspeccionResponse = DetalleInspeccionResponse.builder();
 
         detalleInspeccionResponse.plagas( detallePlagaListToDetallePlagaResponseList( domain.getPlagas() ) );
+        detalleInspeccionResponse.idLote( domain.getIdLote() );
         detalleInspeccionResponse.idDetalle( domain.getIdDetalle() );
         detalleInspeccionResponse.idInspeccion( domain.getIdInspeccion() );
         detalleInspeccionResponse.nombreCultivo( domain.getNombreCultivo() );

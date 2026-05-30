@@ -19,5 +19,7 @@ public interface DetalleInspeccionWebMapper {
 
     @Mapping(target = "porcentajeMuestreado", expression = "java(domain.calcularPorcentajeMuestreado())")
     @Mapping(target = "plagas", source = "plagas")
+    @Mapping(target = "idLote", source = "idLote")      // Nuevo esquema
+    @Mapping(target = "plantasAfectadas", ignore = true) // Calculado externamente
     DetalleInspeccionResponse toResponse(DetalleInspeccion domain);
 }

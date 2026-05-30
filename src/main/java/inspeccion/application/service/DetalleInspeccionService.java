@@ -36,10 +36,16 @@ public class DetalleInspeccionService implements GestionarDetalleUseCase {
             throw new IllegalStateException("No se pueden agregar detalles en estado: " + inspeccion.getEstado());
         }
         DetalleInspeccion d = DetalleInspeccion.builder()
-                .idInspeccion(idInspeccion).nombreCultivo(detalle.getNombreCultivo())
-                .areaInspeccionada(detalle.getAreaInspeccionada()).totalPlantas(detalle.getTotalPlantas())
-                .plantasMuestreadas(detalle.getPlantasMuestreadas()).resultado(detalle.getResultado())
-                .observaciones(detalle.getObservaciones()).fechaCreacion(LocalDateTime.now()).build();
+                .idInspeccion(idInspeccion)
+                .idLote(detalle.getIdLote())           // CRÍTICO: campo requerido nuevo esquema
+                .totalPlantas(detalle.getTotalPlantas())
+                .nombreCultivo(detalle.getNombreCultivo())
+                .areaInspeccionada(detalle.getAreaInspeccionada())
+                .plantasMuestreadas(detalle.getPlantasMuestreadas())
+                .resultado(detalle.getResultado())
+                .observaciones(detalle.getObservaciones())
+                .fechaCreacion(LocalDateTime.now())
+                .build();
         return detalleRepository.guardar(d);
     }
 
@@ -82,11 +88,21 @@ public class DetalleInspeccionService implements GestionarDetalleUseCase {
         double inc = 0.0;
         if (plaga.getPlantasAfectadas() != null && det.getTotalPlantas() != null && det.getTotalPlantas() > 0)
             inc = incidenciaCalculator.calcularPorcentajeIncidencia(plaga.getPlantasAfectadas(), det.getTotalPlantas());
-        DetallePlaga p = DetallePlaga.builder().idDetalle(idDetalle).nombrePlaga(plaga.getNombrePlaga())
-                .nombreCientifico(plaga.getNombreCientifico()).plantasAfectadas(plaga.getPlantasAfectadas())
-                .nivelIncidencia(inc).nivelSeveridad(incidenciaCalculator.calcularNivelIncidencia(inc))
-                .areaAfectada(plaga.getAreaAfectada()).accionRecomendada(plaga.getAccionRecomendada())
-                .fechaDeteccion(plaga.getFechaDeteccion()).build();
+        // Si el frontend envía incidencia calculada, usarla; sino calcular
+        double incidenciaFinal = (plaga.getNivelIncidencia() != null && plaga.getNivelIncidencia() > 0)
+                ? plaga.getNivelIncidencia() : inc;
+        DetallePlaga p = DetallePlaga.builder()
+                .idDetalle(idDetalle)
+                .idPlaga(plaga.getIdPlaga())                   // FK nuevo esquema
+                .plantasAfectadas(plaga.getPlantasAfectadas())
+                .nivelIncidencia(incidenciaFinal)
+                .nivelSeveridad(incidenciaCalculator.calcularNivelIncidencia(incidenciaFinal))
+                .nombrePlaga(plaga.getNombrePlaga())
+                .nombreCientifico(plaga.getNombreCientifico())
+                .areaAfectada(plaga.getAreaAfectada())
+                .accionRecomendada(plaga.getAccionRecomendada())
+                .fechaDeteccion(plaga.getFechaDeteccion())
+                .build();
         return plagaRepository.guardar(p);
     }
 

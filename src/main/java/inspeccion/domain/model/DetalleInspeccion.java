@@ -33,6 +33,7 @@ public class DetalleInspeccion {
 
     public double calcularPorcentajeMuestreado() {
         if (totalPlantas == null || totalPlantas == 0) return 0.0;
+        if (plantasMuestreadas == null) return 100.0; // Sin muestreo parcial → 100%
         return (plantasMuestreadas * 100.0) / totalPlantas;
     }
 

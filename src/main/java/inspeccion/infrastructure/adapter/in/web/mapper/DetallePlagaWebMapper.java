@@ -12,8 +12,11 @@ public interface DetallePlagaWebMapper {
 
     @Mapping(target = "idDetallePlaga", ignore = true)
     @Mapping(target = "idDetalle", ignore = true)
-    @Mapping(target = "nivelIncidencia", ignore = true)
     @Mapping(target = "nivelSeveridad", ignore = true)
+    // Mapear plagaId → idPlaga (nombres distintos en request y domain)
+    @Mapping(target = "idPlaga", source = "plagaId")
+    // Mapear incidencia del request → nivelIncidencia del domain
+    @Mapping(target = "nivelIncidencia", source = "incidencia")
     DetallePlaga toDomain(DetallePlagaRequest request);
 
     @Mapping(target = "requiereAccionInmediata", expression = "java(domain.requiereAccionInmediata())")

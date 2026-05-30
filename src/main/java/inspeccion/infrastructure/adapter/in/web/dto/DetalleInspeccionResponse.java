@@ -14,6 +14,8 @@ import java.util.List;
 public class DetalleInspeccionResponse {
     private Long idDetalle;
     private Long idInspeccion;
+    private Long idLote;            // Nuevo esquema: detalle_inspeccion.id_lote
+    private Integer plantasAfectadas; // Calculado para el reporte
     private String nombreCultivo;
     private Double areaInspeccionada;
     private Integer totalPlantas;

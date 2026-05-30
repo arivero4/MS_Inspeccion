@@ -1,6 +1,5 @@
 package inspeccion.infrastructure.adapter.in.web.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -8,26 +7,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Diccionario: detalle_inspeccion
+ * Campos: id_detalle, total_plantas (NOT NULL), id_inspeccion (FK), id_lote (NOT NULL)
+ */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetalleInspeccionRequest {
 
-    @NotBlank(message = "El nombre del cultivo es obligatorio")
-    private String nombreCultivo;
-
-    @NotNull(message = "El area inspeccionada es obligatoria")
-    @Positive(message = "El area debe ser positiva")
-    private Double areaInspeccionada;
-
-    @NotNull(message = "El total de plantas es obligatorio")
-    @Positive(message = "El total de plantas debe ser positivo")
+    @NotNull(message = "El total de plantas inspeccionadas es obligatorio")
+    @Positive(message = "El total de plantas debe ser mayor a cero")
     private Integer totalPlantas;
 
-    @Positive(message = "Las plantas muestreadas deben ser positivas")
-    private Integer plantasMuestreadas;
+    @NotNull(message = "El lote a inspeccionar es obligatorio")
+    private Long idLote;
 
-    private String resultado;
+    // Campos legacy opcionales (compatibilidad hacia atrás, ignorados en nuevo esquema)
+    private String nombreCultivo;
+    private Double areaInspeccionada;
+    private Integer plantasMuestreadas;
     private String observaciones;
 }

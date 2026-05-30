@@ -2,6 +2,7 @@ package inspeccion.application.service;
 
 import inspeccion.application.port.in.RegistrarInspeccionUseCase;
 import inspeccion.application.port.out.InspeccionRepositoryPort;
+import inspeccion.application.port.out.DetalleInspeccionRepositoryPort;
 import inspeccion.application.dto.LoteInfo;
 import inspeccion.application.port.out.TerritorialClientPort;
 import inspeccion.domain.exception.InspeccionNoEncontradaException;
@@ -20,6 +21,7 @@ public class InspeccionService implements RegistrarInspeccionUseCase {
 
     private final InspeccionRepositoryPort inspeccionRepository;
     private final TerritorialClientPort territorialClient;
+    private final DetalleInspeccionRepositoryPort detalleRepository;
 
     @Override
     public InspeccionFitosanitaria registrar(InspeccionFitosanitaria inspeccion) {
@@ -93,7 +95,9 @@ public class InspeccionService implements RegistrarInspeccionUseCase {
         log.info("Completando inspección ID: {}", idInspeccion);
         InspeccionFitosanitaria inspeccion = inspeccionRepository.buscarPorId(idInspeccion)
                 .orElseThrow(() -> new InspeccionNoEncontradaException(idInspeccion));
-        InspeccionFitosanitaria completada = inspeccion.completar();
+        // Verificar detalles de muestreo en el repositorio (dominio no los carga para evitar N+1)
+        int cantDetalles = detalleRepository.buscarPorInspeccion(idInspeccion).size();
+        InspeccionFitosanitaria completada = inspeccion.completarConValidacion(cantDetalles);
         return inspeccionRepository.actualizar(completada);
     }
 
@@ -111,6 +115,11 @@ public class InspeccionService implements RegistrarInspeccionUseCase {
         log.info("Enviando a revisión inspección ID: {}", idInspeccion);
         InspeccionFitosanitaria inspeccion = inspeccionRepository.buscarPorId(idInspeccion)
                 .orElseThrow(() -> new InspeccionNoEncontradaException(idInspeccion));
+        // También verificamos detalles para la revisión
+        int cantDetalles = detalleRepository.buscarPorInspeccion(idInspeccion).size();
+        if (cantDetalles == 0) {
+            throw new IllegalStateException("No se puede enviar a revisión sin detalles de muestreo registrados.");
+        }
         InspeccionFitosanitaria enRevision = inspeccion.enviarARevision();
         return inspeccionRepository.actualizar(enRevision);
     }

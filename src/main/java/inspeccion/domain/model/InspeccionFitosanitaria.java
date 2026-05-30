@@ -47,9 +47,22 @@ public class InspeccionFitosanitaria {
             throw new IllegalStateException(
                 "La inspección en estado '" + estado + "' no puede completarse. Debe estar EN_PROCESO.");
         }
-        if (detalles == null || detalles.isEmpty()) {
+        // Nota: la validación de detalles se hace en la capa de servicio usando el repositorio,
+        // ya que el domain object no carga detalles para evitar N+1 queries.
+        return copiarConEstado(EstadoInspeccion.COMPLETADA);
+    }
+
+    /**
+     * Versión que valida que existan detalles (cantidad > 0 pasada por el servicio).
+     */
+    public InspeccionFitosanitaria completarConValidacion(int cantidadDetalles) {
+        if (!estado.permiteCompletarse()) {
             throw new IllegalStateException(
-                "No se puede completar una inspección sin detalles registrados.");
+                "La inspección en estado '" + estado + "' no puede completarse. Debe estar EN_PROCESO.");
+        }
+        if (cantidadDetalles <= 0) {
+            throw new IllegalStateException(
+                "No se puede completar una inspección sin detalles de muestreo registrados.");
         }
         return copiarConEstado(EstadoInspeccion.COMPLETADA);
     }

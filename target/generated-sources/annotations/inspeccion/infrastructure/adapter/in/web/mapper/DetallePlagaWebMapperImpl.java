@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-29T21:20:00-0500",
+    date = "2026-05-30T11:37:14-0500",
     comments = "version: 1.6.3, compiler: javac, environment: Java 24.0.2 (Oracle Corporation)"
 )
 @Component
@@ -22,12 +22,12 @@ public class DetallePlagaWebMapperImpl implements DetallePlagaWebMapper {
 
         DetallePlaga.DetallePlagaBuilder detallePlaga = DetallePlaga.builder();
 
+        detallePlaga.idPlaga( request.getPlagaId() );
+        detallePlaga.nivelIncidencia( request.getIncidencia() );
         detallePlaga.plantasAfectadas( request.getPlantasAfectadas() );
         detallePlaga.nombrePlaga( request.getNombrePlaga() );
         detallePlaga.nombreCientifico( request.getNombreCientifico() );
         detallePlaga.areaAfectada( request.getAreaAfectada() );
-        detallePlaga.accionRecomendada( request.getAccionRecomendada() );
-        detallePlaga.fechaDeteccion( request.getFechaDeteccion() );
 
         return detallePlaga.build();
     }

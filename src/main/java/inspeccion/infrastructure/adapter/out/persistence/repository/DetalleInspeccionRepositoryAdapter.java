@@ -24,48 +24,33 @@ public class DetalleInspeccionRepositoryAdapter implements DetalleInspeccionRepo
     private final DetalleInspeccionMapper mapper;
 
     private static final String SELECT_BASE =
-        "SELECT ID_DETALLE, ID_INSPECCION, NOMBRE_CULTIVO, AREA_INSPECCIONADA, " +
-        "TOTAL_PLANTAS, PLANTAS_MUESTREADAS, RESULTADO, OBSERVACIONES, FECHA_CREACION " +
+        "SELECT ID_DETALLE, ID_INSPECCION, TOTAL_PLANTAS, ID_LOTE " +
         "FROM DETALLE_INSPECCION";
 
     private final RowMapper<inspeccion.infrastructure.adapter.out.persistence.entity.DetalleInspeccionEntity> rowMapper =
         (rs, rowNum) -> inspeccion.infrastructure.adapter.out.persistence.entity.DetalleInspeccionEntity.builder()
             .idDetalle(rs.getLong("ID_DETALLE"))
             .idInspeccion(rs.getLong("ID_INSPECCION"))
-            .nombreCultivo(rs.getString("NOMBRE_CULTIVO"))
-            .areaInspeccionada(rs.getDouble("AREA_INSPECCIONADA"))
-            .totalPlantas(rs.getInt("TOTAL_PLANTAS"))
-            .plantasMuestreadas(rs.getInt("PLANTAS_MUESTREADAS"))
-            .resultado(rs.getString("RESULTADO"))
-            .observaciones(rs.getString("OBSERVACIONES"))
-            .fechaCreacion(rs.getTimestamp("FECHA_CREACION") != null
-                ? rs.getTimestamp("FECHA_CREACION").toLocalDateTime() : null)
+            .totalPlantas(rs.getObject("TOTAL_PLANTAS") != null ? rs.getInt("TOTAL_PLANTAS") : null)
+            .idLote(rs.getObject("ID_LOTE") != null ? rs.getLong("ID_LOTE") : null)
             .build();
 
     @Override
     public DetalleInspeccion guardar(DetalleInspeccion detalle) {
         Long id = jdbcTemplate.queryForObject("SELECT SEQ_DETALLE_INSPECCION.NEXTVAL FROM DUAL", Long.class);
         jdbcTemplate.update(
-            "INSERT INTO DETALLE_INSPECCION (ID_DETALLE, ID_INSPECCION, NOMBRE_CULTIVO, " +
-            "AREA_INSPECCIONADA, TOTAL_PLANTAS, PLANTAS_MUESTREADAS, RESULTADO, OBSERVACIONES, FECHA_CREACION) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            id, detalle.getIdInspeccion(), detalle.getNombreCultivo(),
-            detalle.getAreaInspeccionada(), detalle.getTotalPlantas(), detalle.getPlantasMuestreadas(),
-            detalle.getResultado(), detalle.getObservaciones(),
-            Timestamp.valueOf(LocalDateTime.now()));
+            "INSERT INTO DETALLE_INSPECCION (ID_DETALLE, ID_INSPECCION, TOTAL_PLANTAS, ID_LOTE) " +
+            "VALUES (?, ?, ?, ?)",
+            id, detalle.getIdInspeccion(), detalle.getTotalPlantas(), detalle.getIdLote());
         return buscarPorId(id).orElseThrow();
     }
 
     @Override
     public DetalleInspeccion actualizar(DetalleInspeccion detalle) {
         jdbcTemplate.update(
-            "UPDATE DETALLE_INSPECCION SET NOMBRE_CULTIVO = ?, AREA_INSPECCIONADA = ?, " +
-            "TOTAL_PLANTAS = ?, PLANTAS_MUESTREADAS = ?, RESULTADO = ?, OBSERVACIONES = ? " +
+            "UPDATE DETALLE_INSPECCION SET TOTAL_PLANTAS = ?, ID_LOTE = ? " +
             "WHERE ID_DETALLE = ?",
-            detalle.getNombreCultivo(), detalle.getAreaInspeccionada(),
-            detalle.getTotalPlantas(), detalle.getPlantasMuestreadas(),
-            detalle.getResultado(), detalle.getObservaciones(),
-            detalle.getIdDetalle());
+            detalle.getTotalPlantas(), detalle.getIdLote(), detalle.getIdDetalle());
         return buscarPorId(detalle.getIdDetalle()).orElseThrow();
     }
 

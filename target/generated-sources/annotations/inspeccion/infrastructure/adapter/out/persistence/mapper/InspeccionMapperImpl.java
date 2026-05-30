@@ -1,7 +1,6 @@
 package inspeccion.infrastructure.adapter.out.persistence.mapper;
 
 import inspeccion.domain.enums.EstadoInspeccion;
-import inspeccion.domain.enums.TipoInspeccion;
 import inspeccion.domain.model.InspeccionFitosanitaria;
 import inspeccion.infrastructure.adapter.out.persistence.entity.InspeccionEntity;
 import javax.annotation.processing.Generated;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-29T03:30:55-0500",
+    date = "2026-05-29T21:20:00-0500",
     comments = "version: 1.6.3, compiler: javac, environment: Java 24.0.2 (Oracle Corporation)"
 )
 @Component
@@ -23,12 +22,9 @@ public class InspeccionMapperImpl implements InspeccionMapper {
 
         InspeccionFitosanitaria.InspeccionFitosanitariaBuilder inspeccionFitosanitaria = InspeccionFitosanitaria.builder();
 
+        inspeccionFitosanitaria.numeroInspeccion( entity.getCodigoIca() );
         inspeccionFitosanitaria.idInspeccion( entity.getIdInspeccion() );
-        inspeccionFitosanitaria.numeroInspeccion( entity.getNumeroInspeccion() );
         inspeccionFitosanitaria.fechaInspeccion( entity.getFechaInspeccion() );
-        if ( entity.getTipoInspeccion() != null ) {
-            inspeccionFitosanitaria.tipoInspeccion( Enum.valueOf( TipoInspeccion.class, entity.getTipoInspeccion() ) );
-        }
         if ( entity.getEstado() != null ) {
             inspeccionFitosanitaria.estado( Enum.valueOf( EstadoInspeccion.class, entity.getEstado() ) );
         }
@@ -39,6 +35,8 @@ public class InspeccionMapperImpl implements InspeccionMapper {
         inspeccionFitosanitaria.observaciones( entity.getObservaciones() );
         inspeccionFitosanitaria.fechaCreacion( entity.getFechaCreacion() );
         inspeccionFitosanitaria.fechaActualizacion( entity.getFechaActualizacion() );
+
+        inspeccionFitosanitaria.tipoInspeccion( entity.getTipo() != null ? inspeccion.domain.enums.TipoInspeccion.valueOf(entity.getTipo()) : null );
 
         return inspeccionFitosanitaria.build();
     }
@@ -51,22 +49,26 @@ public class InspeccionMapperImpl implements InspeccionMapper {
 
         InspeccionEntity.InspeccionEntityBuilder inspeccionEntity = InspeccionEntity.builder();
 
+        inspeccionEntity.codigoIca( domain.getNumeroInspeccion() );
         inspeccionEntity.idInspeccion( domain.getIdInspeccion() );
-        inspeccionEntity.numeroInspeccion( domain.getNumeroInspeccion() );
         inspeccionEntity.fechaInspeccion( domain.getFechaInspeccion() );
-        if ( domain.getTipoInspeccion() != null ) {
-            inspeccionEntity.tipoInspeccion( domain.getTipoInspeccion().name() );
-        }
         if ( domain.getEstado() != null ) {
             inspeccionEntity.estado( domain.getEstado().name() );
         }
+        inspeccionEntity.fechaActualizacion( domain.getFechaActualizacion() );
+        inspeccionEntity.observaciones( domain.getObservaciones() );
+        inspeccionEntity.numeroInspeccion( domain.getNumeroInspeccion() );
         inspeccionEntity.idLote( domain.getIdLote() );
         inspeccionEntity.codigoLote( domain.getCodigoLote() );
         inspeccionEntity.nombreInspector( domain.getNombreInspector() );
         inspeccionEntity.cedulaInspector( domain.getCedulaInspector() );
-        inspeccionEntity.observaciones( domain.getObservaciones() );
+        if ( domain.getTipoInspeccion() != null ) {
+            inspeccionEntity.tipoInspeccion( domain.getTipoInspeccion().name() );
+        }
         inspeccionEntity.fechaCreacion( domain.getFechaCreacion() );
-        inspeccionEntity.fechaActualizacion( domain.getFechaActualizacion() );
+
+        inspeccionEntity.tipo( domain.getTipoInspeccion() != null ? domain.getTipoInspeccion().name() : null );
+        inspeccionEntity.idGrupo( 1L );
 
         return inspeccionEntity.build();
     }

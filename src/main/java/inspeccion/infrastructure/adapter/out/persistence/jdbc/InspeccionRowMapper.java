@@ -15,20 +15,21 @@ public class InspeccionRowMapper implements RowMapper<InspeccionEntity> {
 
     @Override
     public InspeccionEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return InspeccionEntity.builder()
+        InspeccionEntity entity = InspeccionEntity.builder()
                 .idInspeccion(rs.getLong("ID_INSPECCION"))
-                .numeroInspeccion(rs.getString("NUMERO_INSPECCION"))
+                .codigoIca(rs.getString("CODIGO_ICA"))
                 .fechaInspeccion(toLocalDate(rs, "FECHA_INSPECCION"))
-                .tipoInspeccion(rs.getString("TIPO_INSPECCION"))
                 .estado(rs.getString("ESTADO"))
-                .idLote(rs.getLong("ID_LOTE"))
-                .codigoLote(rs.getString("CODIGO_LOTE"))
-                .nombreInspector(rs.getString("NOMBRE_INSPECTOR"))
-                .cedulaInspector(rs.getString("CEDULA_INSPECTOR"))
-                .observaciones(rs.getString("OBSERVACIONES"))
-                .fechaCreacion(toLocalDateTime(rs, "FECHA_CREACION"))
+                .tipo(rs.getString("TIPO"))
+                .idGrupo(rs.getLong("ID_GRUPO"))
                 .fechaActualizacion(toLocalDateTime(rs, "FECHA_ACTUALIZACION"))
+                .observaciones(rs.getString("OBSERVACIONES"))
                 .build();
+
+        // Populate compatibility fields
+        entity.setNumeroInspeccion(entity.getCodigoIca());
+        entity.setTipoInspeccion(entity.getTipo());
+        return entity;
     }
 
     private LocalDate toLocalDate(ResultSet rs, String column) throws SQLException {

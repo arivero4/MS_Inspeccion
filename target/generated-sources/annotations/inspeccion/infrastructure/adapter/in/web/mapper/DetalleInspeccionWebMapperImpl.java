@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-29T03:30:55-0500",
+    date = "2026-05-29T21:20:00-0500",
     comments = "version: 1.6.3, compiler: javac, environment: Java 24.0.2 (Oracle Corporation)"
 )
 @Component
@@ -30,9 +30,9 @@ public class DetalleInspeccionWebMapperImpl implements DetalleInspeccionWebMappe
 
         DetalleInspeccion.DetalleInspeccionBuilder detalleInspeccion = DetalleInspeccion.builder();
 
+        detalleInspeccion.totalPlantas( request.getTotalPlantas() );
         detalleInspeccion.nombreCultivo( request.getNombreCultivo() );
         detalleInspeccion.areaInspeccionada( request.getAreaInspeccionada() );
-        detalleInspeccion.totalPlantas( request.getTotalPlantas() );
         detalleInspeccion.plantasMuestreadas( request.getPlantasMuestreadas() );
         detalleInspeccion.resultado( request.getResultado() );
         detalleInspeccion.observaciones( request.getObservaciones() );

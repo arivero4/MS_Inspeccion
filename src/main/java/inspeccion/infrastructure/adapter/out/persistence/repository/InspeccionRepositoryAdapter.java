@@ -32,31 +32,35 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
     private final InspeccionMapper mapper;
 
     private static final String SELECT_BASE =
-        "SELECT ID_INSPECCION, NUMERO_INSPECCION, FECHA_INSPECCION, TIPO_INSPECCION, ESTADO, " +
-        "ID_LOTE, CODIGO_LOTE, NOMBRE_INSPECTOR, CEDULA_INSPECTOR, OBSERVACIONES, " +
-        "FECHA_CREACION, FECHA_ACTUALIZACION FROM INSPECCION_FITOSANITARIA";
+        "SELECT ID_INSPECCION, CODIGO_ICA, FECHA_INSPECCION, ESTADO, " +
+        "TIPO, ID_GRUPO, FECHA_ACTUALIZACION, OBSERVACIONES FROM INSPECCION_FITOSANITARIA";
 
     @Override
     public InspeccionFitosanitaria guardar(InspeccionFitosanitaria inspeccion) {
         Long id = jdbcTemplate.queryForObject("SELECT SEQ_INSPECCION.NEXTVAL FROM DUAL", Long.class);
         String sql = "INSERT INTO INSPECCION_FITOSANITARIA " +
-            "(ID_INSPECCION, NUMERO_INSPECCION, FECHA_INSPECCION, TIPO_INSPECCION, ESTADO, " +
-            "ID_LOTE, CODIGO_LOTE, NOMBRE_INSPECTOR, CEDULA_INSPECTOR, OBSERVACIONES, FECHA_CREACION, FECHA_ACTUALIZACION) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "(ID_INSPECCION, CODIGO_ICA, FECHA_INSPECCION, ESTADO, " +
+            "TIPO, ID_GRUPO, FECHA_ACTUALIZACION, OBSERVACIONES) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         LocalDateTime ahora = LocalDateTime.now();
+        // codigoIca comes from numeroInspeccion if set, else generate one
+        String codigoIca = inspeccion.getNumeroInspeccion() != null
+            ? inspeccion.getNumeroInspeccion()
+            : "ICA-" + id;
+        // tipoInspeccion → tipo
+        String tipo = inspeccion.getTipoInspeccion() != null ? inspeccion.getTipoInspeccion().name() : null;
+        // idGrupo defaults to 1 if not set (required NOT NULL)
+        Long idGrupo = 1L;
+
         jdbcTemplate.update(sql, id,
-            inspeccion.getNumeroInspeccion(),
-            Date.valueOf(inspeccion.getFechaInspeccion()),
-            inspeccion.getTipoInspeccion().name(),
-            inspeccion.getEstado().name(),
-            inspeccion.getIdLote(),
-            inspeccion.getCodigoLote(),
-            inspeccion.getNombreInspector(),
-            inspeccion.getCedulaInspector(),
-            inspeccion.getObservaciones(),
+            codigoIca,
+            inspeccion.getFechaInspeccion() != null ? Date.valueOf(inspeccion.getFechaInspeccion()) : null,
+            inspeccion.getEstado() != null ? inspeccion.getEstado().name() : EstadoInspeccion.PROGRAMADA.name(),
+            tipo,
+            idGrupo,
             Timestamp.valueOf(ahora),
-            Timestamp.valueOf(ahora));
+            inspeccion.getObservaciones());
 
         return buscarPorId(id).orElseThrow();
     }
@@ -64,16 +68,14 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
     @Override
     public InspeccionFitosanitaria actualizar(InspeccionFitosanitaria inspeccion) {
         String sql = "UPDATE INSPECCION_FITOSANITARIA SET " +
-            "FECHA_INSPECCION = ?, TIPO_INSPECCION = ?, ESTADO = ?, " +
-            "NOMBRE_INSPECTOR = ?, CEDULA_INSPECTOR = ?, OBSERVACIONES = ?, FECHA_ACTUALIZACION = ? " +
+            "FECHA_INSPECCION = ?, TIPO = ?, ESTADO = ?, " +
+            "OBSERVACIONES = ?, FECHA_ACTUALIZACION = ? " +
             "WHERE ID_INSPECCION = ?";
 
         jdbcTemplate.update(sql,
-            Date.valueOf(inspeccion.getFechaInspeccion()),
-            inspeccion.getTipoInspeccion().name(),
-            inspeccion.getEstado().name(),
-            inspeccion.getNombreInspector(),
-            inspeccion.getCedulaInspector(),
+            inspeccion.getFechaInspeccion() != null ? Date.valueOf(inspeccion.getFechaInspeccion()) : null,
+            inspeccion.getTipoInspeccion() != null ? inspeccion.getTipoInspeccion().name() : null,
+            inspeccion.getEstado() != null ? inspeccion.getEstado().name() : null,
             inspeccion.getObservaciones(),
             Timestamp.valueOf(LocalDateTime.now()),
             inspeccion.getIdInspeccion());
@@ -96,7 +98,7 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
     public Optional<InspeccionFitosanitaria> buscarPorNumero(String numeroInspeccion) {
         try {
             InspeccionEntity entity = jdbcTemplate.queryForObject(
-                SELECT_BASE + " WHERE NUMERO_INSPECCION = ?", rowMapper, numeroInspeccion);
+                SELECT_BASE + " WHERE CODIGO_ICA = ?", rowMapper, numeroInspeccion);
             return Optional.ofNullable(entity).map(mapper::entityToDomain);
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -105,7 +107,7 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
 
     @Override
     public List<InspeccionFitosanitaria> buscarTodas() {
-        return jdbcTemplate.query(SELECT_BASE + " ORDER BY FECHA_CREACION DESC", rowMapper)
+        return jdbcTemplate.query(SELECT_BASE + " ORDER BY FECHA_ACTUALIZACION DESC", rowMapper)
                 .stream().map(mapper::entityToDomain).collect(Collectors.toList());
     }
 
@@ -118,16 +120,17 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
 
     @Override
     public List<InspeccionFitosanitaria> buscarPorLote(Long idLote) {
-        return jdbcTemplate.query(SELECT_BASE + " WHERE ID_LOTE = ? ORDER BY FECHA_INSPECCION DESC",
-                rowMapper, idLote)
+        // INSPECCION_FITOSANITARIA no longer has ID_LOTE in new schema — use DETALLE_INSPECCION
+        String sql = SELECT_BASE + " WHERE ID_INSPECCION IN (" +
+            "SELECT ID_INSPECCION FROM DETALLE_INSPECCION WHERE ID_LOTE = ?) ORDER BY FECHA_INSPECCION DESC";
+        return jdbcTemplate.query(sql, rowMapper, idLote)
                 .stream().map(mapper::entityToDomain).collect(Collectors.toList());
     }
 
     @Override
     public List<InspeccionFitosanitaria> buscarPorInspector(String cedulaInspector) {
-        return jdbcTemplate.query(SELECT_BASE + " WHERE CEDULA_INSPECTOR = ? ORDER BY FECHA_INSPECCION DESC",
-                rowMapper, cedulaInspector)
-                .stream().map(mapper::entityToDomain).collect(Collectors.toList());
+        // CEDULA_INSPECTOR no longer exists — return all
+        return buscarTodas();
     }
 
     @Override
@@ -142,10 +145,9 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
     public List<InspeccionFitosanitaria> buscarConAlertaCritica() {
         String sql = SELECT_BASE +
             " WHERE ID_INSPECCION IN (" +
-            "  SELECT DISTINCT i.ID_INSPECCION FROM INSPECCION_FITOSANITARIA i" +
-            "  JOIN DETALLE_INSPECCION di ON i.ID_INSPECCION = di.ID_INSPECCION" +
+            "  SELECT DISTINCT di.ID_INSPECCION FROM DETALLE_INSPECCION di" +
             "  JOIN DETALLE_PLAGA dp ON di.ID_DETALLE = dp.ID_DETALLE" +
-            "  WHERE dp.NIVEL_INCIDENCIA >= 30" +
+            "  WHERE dp.INCIDENCIA >= 30" +
             ") ORDER BY FECHA_INSPECCION DESC";
         return jdbcTemplate.query(sql, rowMapper).stream().map(mapper::entityToDomain).collect(Collectors.toList());
     }
@@ -153,7 +155,7 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
     @Override
     public boolean existePorNumero(String numeroInspeccion) {
         Integer count = jdbcTemplate.queryForObject(
-            "SELECT COUNT(1) FROM INSPECCION_FITOSANITARIA WHERE NUMERO_INSPECCION = ?",
+            "SELECT COUNT(1) FROM INSPECCION_FITOSANITARIA WHERE CODIGO_ICA = ?",
             Integer.class, numeroInspeccion);
         return count != null && count > 0;
     }

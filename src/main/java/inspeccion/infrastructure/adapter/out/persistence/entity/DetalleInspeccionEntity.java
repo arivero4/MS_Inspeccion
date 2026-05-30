@@ -13,9 +13,12 @@ import java.time.LocalDateTime;
 public class DetalleInspeccionEntity {
     private Long idDetalle;
     private Long idInspeccion;
+    private Integer totalPlantas;
+    private Long idLote;              // new: ID_LOTE
+
+    // Fields removed from new schema — kept for domain mapper compatibility
     private String nombreCultivo;
     private Double areaInspeccionada;
-    private Integer totalPlantas;
     private Integer plantasMuestreadas;
     private String resultado;
     private String observaciones;

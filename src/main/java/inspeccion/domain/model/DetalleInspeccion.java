@@ -17,9 +17,12 @@ public class DetalleInspeccion {
 
     private Long idDetalle;
     private Long idInspeccion;
+    private Integer totalPlantas;
+    private Long idLote;               // new field from schema
+
+    // Fields kept for backward compat (not in new schema)
     private String nombreCultivo;
     private Double areaInspeccionada;
-    private Integer totalPlantas;
     private Integer plantasMuestreadas;
     private String resultado;
     private String observaciones;

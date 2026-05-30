@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-29T03:30:54-0500",
+    date = "2026-05-29T21:20:00-0500",
     comments = "version: 1.6.3, compiler: javac, environment: Java 24.0.2 (Oracle Corporation)"
 )
 @Component
@@ -21,12 +21,13 @@ public class DetallePlagaMapperImpl implements DetallePlagaMapper {
 
         DetallePlaga.DetallePlagaBuilder detallePlaga = DetallePlaga.builder();
 
+        detallePlaga.nivelIncidencia( entity.getIncidencia() );
+        detallePlaga.idPlaga( entity.getIdPlaga() );
         detallePlaga.idDetallePlaga( entity.getIdDetallePlaga() );
         detallePlaga.idDetalle( entity.getIdDetalle() );
+        detallePlaga.plantasAfectadas( entity.getPlantasAfectadas() );
         detallePlaga.nombrePlaga( entity.getNombrePlaga() );
         detallePlaga.nombreCientifico( entity.getNombreCientifico() );
-        detallePlaga.plantasAfectadas( entity.getPlantasAfectadas() );
-        detallePlaga.nivelIncidencia( entity.getNivelIncidencia() );
         detallePlaga.nivelSeveridad( entity.getNivelSeveridad() );
         detallePlaga.areaAfectada( entity.getAreaAfectada() );
         detallePlaga.accionRecomendada( entity.getAccionRecomendada() );
@@ -43,11 +44,13 @@ public class DetallePlagaMapperImpl implements DetallePlagaMapper {
 
         DetallePlagaEntity.DetallePlagaEntityBuilder detallePlagaEntity = DetallePlagaEntity.builder();
 
+        detallePlagaEntity.incidencia( domain.getNivelIncidencia() );
+        detallePlagaEntity.idPlaga( domain.getIdPlaga() );
         detallePlagaEntity.idDetallePlaga( domain.getIdDetallePlaga() );
         detallePlagaEntity.idDetalle( domain.getIdDetalle() );
+        detallePlagaEntity.plantasAfectadas( domain.getPlantasAfectadas() );
         detallePlagaEntity.nombrePlaga( domain.getNombrePlaga() );
         detallePlagaEntity.nombreCientifico( domain.getNombreCientifico() );
-        detallePlagaEntity.plantasAfectadas( domain.getPlantasAfectadas() );
         detallePlagaEntity.nivelIncidencia( domain.getNivelIncidencia() );
         detallePlagaEntity.nivelSeveridad( domain.getNivelSeveridad() );
         detallePlagaEntity.areaAfectada( domain.getAreaAfectada() );

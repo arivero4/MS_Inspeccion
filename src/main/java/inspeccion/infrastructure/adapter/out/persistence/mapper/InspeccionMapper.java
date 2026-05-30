@@ -11,7 +11,12 @@ import org.mapstruct.ReportingPolicy;
 public interface InspeccionMapper {
 
     @Mapping(target = "detalles", ignore = true)
+    @Mapping(target = "numeroInspeccion", source = "codigoIca")
+    @Mapping(target = "tipoInspeccion", expression = "java(entity.getTipo() != null ? inspeccion.domain.enums.TipoInspeccion.valueOf(entity.getTipo()) : null)")
     InspeccionFitosanitaria entityToDomain(InspeccionEntity entity);
 
+    @Mapping(target = "codigoIca", source = "numeroInspeccion")
+    @Mapping(target = "tipo", expression = "java(domain.getTipoInspeccion() != null ? domain.getTipoInspeccion().name() : null)")
+    @Mapping(target = "idGrupo", constant = "1L")
     InspeccionEntity domainToEntity(InspeccionFitosanitaria domain);
 }

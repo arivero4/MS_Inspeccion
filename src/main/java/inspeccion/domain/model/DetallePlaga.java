@@ -15,10 +15,13 @@ public class DetallePlaga {
 
     private Long idDetallePlaga;
     private Long idDetalle;
+    private Integer plantasAfectadas;
+    private Double nivelIncidencia;   // maps to INCIDENCIA column
+    private Long idPlaga;             // new: FK to PLAGA table
+
+    // Fields not in new schema — kept for backward compat
     private String nombrePlaga;
     private String nombreCientifico;
-    private Integer plantasAfectadas;
-    private Double nivelIncidencia;
     private String nivelSeveridad;
     private Double areaAfectada;
     private String accionRecomendada;

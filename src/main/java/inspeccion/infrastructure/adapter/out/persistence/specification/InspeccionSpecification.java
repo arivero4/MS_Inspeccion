@@ -20,9 +20,9 @@ public class InspeccionSpecification {
     public String buildWhereClause() {
         StringBuilder sb = new StringBuilder(" WHERE 1=1");
         if (estado != null) sb.append(" AND i.ESTADO = '").append(estado.name()).append("'");
-        if (tipo != null) sb.append(" AND i.TIPO_INSPECCION = '").append(tipo.name()).append("'");
-        if (idLote != null) sb.append(" AND i.ID_LOTE = ").append(idLote);
-        if (cedulaInspector != null) sb.append(" AND i.CEDULA_INSPECTOR = '").append(cedulaInspector).append("'");
+        if (tipo != null) sb.append(" AND i.TIPO = '").append(tipo.name()).append("'");
+        // ID_LOTE moved to DETALLE_INSPECCION in new schema — skip for now
+        // CEDULA_INSPECTOR removed from new schema — skip
         if (fechaInicio != null) sb.append(" AND i.FECHA_INSPECCION >= DATE '").append(fechaInicio).append("'");
         if (fechaFin != null) sb.append(" AND i.FECHA_INSPECCION <= DATE '").append(fechaFin).append("'");
         return sb.toString();

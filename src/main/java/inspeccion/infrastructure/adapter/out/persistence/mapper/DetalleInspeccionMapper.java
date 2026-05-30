@@ -11,7 +11,9 @@ import org.mapstruct.ReportingPolicy;
 public interface DetalleInspeccionMapper {
 
     @Mapping(target = "plagas", ignore = true)
+    @Mapping(target = "idLote", source = "idLote")
     DetalleInspeccion entityToDomain(DetalleInspeccionEntity entity);
 
+    @Mapping(target = "idLote", source = "idLote")
     DetalleInspeccionEntity domainToEntity(DetalleInspeccion domain);
 }

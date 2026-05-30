@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,50 +22,42 @@ public class DetallePlagaRepositoryAdapter implements DetallePlagaRepositoryPort
     private final DetallePlagaMapper mapper;
 
     private static final String SELECT_BASE =
-        "SELECT ID_DETALLE_PLAGA, ID_DETALLE, NOMBRE_PLAGA, NOMBRE_CIENTIFICO, " +
-        "PLANTAS_AFECTADAS, NIVEL_INCIDENCIA, NIVEL_SEVERIDAD, AREA_AFECTADA, " +
-        "ACCION_RECOMENDADA, FECHA_DETECCION FROM DETALLE_PLAGA";
+        "SELECT ID_DETALLE_PLAGA, ID_DETALLE, PLANTAS_AFECTADAS, INCIDENCIA, ID_PLAGA " +
+        "FROM DETALLE_PLAGA";
 
     private final RowMapper<inspeccion.infrastructure.adapter.out.persistence.entity.DetallePlagaEntity> rowMapper =
-        (rs, rowNum) -> inspeccion.infrastructure.adapter.out.persistence.entity.DetallePlagaEntity.builder()
-            .idDetallePlaga(rs.getLong("ID_DETALLE_PLAGA"))
-            .idDetalle(rs.getLong("ID_DETALLE"))
-            .nombrePlaga(rs.getString("NOMBRE_PLAGA"))
-            .nombreCientifico(rs.getString("NOMBRE_CIENTIFICO"))
-            .plantasAfectadas(rs.getInt("PLANTAS_AFECTADAS"))
-            .nivelIncidencia(rs.getDouble("NIVEL_INCIDENCIA"))
-            .nivelSeveridad(rs.getString("NIVEL_SEVERIDAD"))
-            .areaAfectada(rs.getDouble("AREA_AFECTADA"))
-            .accionRecomendada(rs.getString("ACCION_RECOMENDADA"))
-            .fechaDeteccion(rs.getDate("FECHA_DETECCION") != null
-                ? rs.getDate("FECHA_DETECCION").toLocalDate() : null)
-            .build();
+        (rs, rowNum) -> {
+            inspeccion.infrastructure.adapter.out.persistence.entity.DetallePlagaEntity e =
+                inspeccion.infrastructure.adapter.out.persistence.entity.DetallePlagaEntity.builder()
+                    .idDetallePlaga(rs.getLong("ID_DETALLE_PLAGA"))
+                    .idDetalle(rs.getLong("ID_DETALLE"))
+                    .plantasAfectadas(rs.getObject("PLANTAS_AFECTADAS") != null ? rs.getInt("PLANTAS_AFECTADAS") : null)
+                    .incidencia(rs.getObject("INCIDENCIA") != null ? rs.getDouble("INCIDENCIA") : null)
+                    .idPlaga(rs.getObject("ID_PLAGA") != null ? rs.getLong("ID_PLAGA") : null)
+                    .build();
+            // Populate compat fields
+            e.setNivelIncidencia(e.getIncidencia());
+            return e;
+        };
 
     @Override
     public DetallePlaga guardar(DetallePlaga plaga) {
         Long id = jdbcTemplate.queryForObject("SELECT SEQ_DETALLE_PLAGA.NEXTVAL FROM DUAL", Long.class);
         jdbcTemplate.update(
-            "INSERT INTO DETALLE_PLAGA (ID_DETALLE_PLAGA, ID_DETALLE, NOMBRE_PLAGA, NOMBRE_CIENTIFICO, " +
-            "PLANTAS_AFECTADAS, NIVEL_INCIDENCIA, NIVEL_SEVERIDAD, AREA_AFECTADA, ACCION_RECOMENDADA, FECHA_DETECCION) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            id, plaga.getIdDetalle(), plaga.getNombrePlaga(), plaga.getNombreCientifico(),
-            plaga.getPlantasAfectadas(), plaga.getNivelIncidencia(), plaga.getNivelSeveridad(),
-            plaga.getAreaAfectada(), plaga.getAccionRecomendada(),
-            plaga.getFechaDeteccion() != null ? Date.valueOf(plaga.getFechaDeteccion()) : null);
+            "INSERT INTO DETALLE_PLAGA (ID_DETALLE_PLAGA, ID_DETALLE, PLANTAS_AFECTADAS, INCIDENCIA, ID_PLAGA) " +
+            "VALUES (?, ?, ?, ?, ?)",
+            id, plaga.getIdDetalle(), plaga.getPlantasAfectadas(),
+            plaga.getNivelIncidencia(), plaga.getIdPlaga());
         return buscarPorId(id).orElseThrow();
     }
 
     @Override
     public DetallePlaga actualizar(DetallePlaga plaga) {
         jdbcTemplate.update(
-            "UPDATE DETALLE_PLAGA SET NOMBRE_PLAGA = ?, NOMBRE_CIENTIFICO = ?, PLANTAS_AFECTADAS = ?, " +
-            "NIVEL_INCIDENCIA = ?, NIVEL_SEVERIDAD = ?, AREA_AFECTADA = ?, ACCION_RECOMENDADA = ?, FECHA_DETECCION = ? " +
+            "UPDATE DETALLE_PLAGA SET PLANTAS_AFECTADAS = ?, INCIDENCIA = ?, ID_PLAGA = ? " +
             "WHERE ID_DETALLE_PLAGA = ?",
-            plaga.getNombrePlaga(), plaga.getNombreCientifico(), plaga.getPlantasAfectadas(),
-            plaga.getNivelIncidencia(), plaga.getNivelSeveridad(), plaga.getAreaAfectada(),
-            plaga.getAccionRecomendada(),
-            plaga.getFechaDeteccion() != null ? Date.valueOf(plaga.getFechaDeteccion()) : null,
-            plaga.getIdDetallePlaga());
+            plaga.getPlantasAfectadas(), plaga.getNivelIncidencia(),
+            plaga.getIdPlaga(), plaga.getIdDetallePlaga());
         return buscarPorId(plaga.getIdDetallePlaga()).orElseThrow();
     }
 
@@ -83,14 +74,14 @@ public class DetallePlagaRepositoryAdapter implements DetallePlagaRepositoryPort
 
     @Override
     public List<DetallePlaga> buscarPorDetalle(Long idDetalle) {
-        return jdbcTemplate.query(SELECT_BASE + " WHERE ID_DETALLE = ? ORDER BY NIVEL_INCIDENCIA DESC",
+        return jdbcTemplate.query(SELECT_BASE + " WHERE ID_DETALLE = ? ORDER BY INCIDENCIA DESC",
                 rowMapper, idDetalle)
                 .stream().map(mapper::entityToDomain).collect(Collectors.toList());
     }
 
     @Override
     public List<DetallePlaga> buscarConIncidenciaAlta() {
-        return jdbcTemplate.query(SELECT_BASE + " WHERE NIVEL_INCIDENCIA >= 30 ORDER BY NIVEL_INCIDENCIA DESC",
+        return jdbcTemplate.query(SELECT_BASE + " WHERE INCIDENCIA >= 30 ORDER BY INCIDENCIA DESC",
                 rowMapper)
                 .stream().map(mapper::entityToDomain).collect(Collectors.toList());
     }

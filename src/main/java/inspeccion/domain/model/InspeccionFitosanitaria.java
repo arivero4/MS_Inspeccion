@@ -99,6 +99,20 @@ public class InspeccionFitosanitaria {
         return copiarConEstado(EstadoInspeccion.PENDIENTE_REVISION);
     }
 
+    public InspeccionFitosanitaria aprobar() {
+        if (this.estado != EstadoInspeccion.PENDIENTE_REVISION) {
+            throw new IllegalStateException("Solo inspecciones PENDIENTE_REVISION pueden ser aprobadas.");
+        }
+        return copiarConEstado(EstadoInspeccion.APROBADA);
+    }
+
+    public InspeccionFitosanitaria devolverParaCorreccion() {
+        if (this.estado != EstadoInspeccion.PENDIENTE_REVISION) {
+            throw new IllegalStateException("Solo inspecciones PENDIENTE_REVISION pueden devolverse.");
+        }
+        return copiarConEstado(EstadoInspeccion.EN_PROCESO);
+    }
+
     public boolean tieneDeteccionesAltas() {
         return detalles != null && detalles.stream()
                 .flatMap(d -> d.getPlagas() != null ? d.getPlagas().stream() : java.util.stream.Stream.empty())

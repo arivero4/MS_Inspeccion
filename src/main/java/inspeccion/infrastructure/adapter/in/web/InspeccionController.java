@@ -133,4 +133,16 @@ public class InspeccionController {
     public ResponseEntity<InspeccionResponse> enviarARevision(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(registrarUseCase.enviarARevision(id)));
     }
+
+    @PatchMapping("/{id}/aprobar")
+    @Operation(summary = "Aprobar inspección revisada (Admin ICA)")
+    public ResponseEntity<InspeccionResponse> aprobar(@PathVariable Long id) {
+        return ResponseEntity.ok(mapper.toResponse(registrarUseCase.aprobar(id)));
+    }
+
+    @PatchMapping("/{id}/devolver")
+    @Operation(summary = "Devolver inspección para corrección (Admin ICA)")
+    public ResponseEntity<InspeccionResponse> devolver(@PathVariable Long id) {
+        return ResponseEntity.ok(mapper.toResponse(registrarUseCase.devolverParaCorreccion(id)));
+    }
 }

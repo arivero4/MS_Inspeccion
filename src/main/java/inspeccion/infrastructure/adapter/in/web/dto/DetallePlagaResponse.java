@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class DetallePlagaResponse {
     private Long idDetallePlaga;
     private Long idDetalle;
+    private Long idPlaga;
     private String nombrePlaga;
     private String nombreCientifico;
     private Integer plantasAfectadas;

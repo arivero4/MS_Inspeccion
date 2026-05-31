@@ -124,6 +124,24 @@ public class InspeccionService implements RegistrarInspeccionUseCase {
         return inspeccionRepository.actualizar(enRevision);
     }
 
+    @Override
+    public InspeccionFitosanitaria aprobar(Long idInspeccion) {
+        log.info("Aprobando inspección ID: {}", idInspeccion);
+        InspeccionFitosanitaria inspeccion = inspeccionRepository.buscarPorId(idInspeccion)
+                .orElseThrow(() -> new InspeccionNoEncontradaException(idInspeccion));
+        InspeccionFitosanitaria aprobada = inspeccion.aprobar();
+        return inspeccionRepository.actualizar(aprobada);
+    }
+
+    @Override
+    public InspeccionFitosanitaria devolverParaCorreccion(Long idInspeccion) {
+        log.info("Devolviendo a EN_PROCESO inspección ID: {}", idInspeccion);
+        InspeccionFitosanitaria inspeccion = inspeccionRepository.buscarPorId(idInspeccion)
+                .orElseThrow(() -> new InspeccionNoEncontradaException(idInspeccion));
+        InspeccionFitosanitaria devuelta = inspeccion.devolverParaCorreccion();
+        return inspeccionRepository.actualizar(devuelta);
+    }
+
     private String generarNumeroInspeccion() {
         String anio = String.valueOf(LocalDateTime.now().getYear());
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMddHHmmss"));

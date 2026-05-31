@@ -9,4 +9,6 @@ public interface RegistrarInspeccionUseCase {
     InspeccionFitosanitaria completar(Long idInspeccion);
     InspeccionFitosanitaria cancelar(Long idInspeccion, String motivo);
     InspeccionFitosanitaria enviarARevision(Long idInspeccion);
+    InspeccionFitosanitaria aprobar(Long idInspeccion);
+    InspeccionFitosanitaria devolverParaCorreccion(Long idInspeccion);
 }

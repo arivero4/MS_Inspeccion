@@ -5,7 +5,8 @@ public enum EstadoInspeccion {
     EN_PROCESO,
     COMPLETADA,
     CANCELADA,
-    PENDIENTE_REVISION;
+    PENDIENTE_REVISION,
+    APROBADA;
 
     public boolean permiteAgregarDetalles() {
         return this == EN_PROCESO;

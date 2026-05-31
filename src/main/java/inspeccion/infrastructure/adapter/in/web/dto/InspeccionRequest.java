@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+/** DTO de entrada para programar o actualizar una inspeccion fitosanitaria. */
 
 @Data
 @Builder

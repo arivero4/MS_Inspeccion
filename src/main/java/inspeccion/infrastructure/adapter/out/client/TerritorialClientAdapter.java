@@ -11,6 +11,16 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
+/**
+ * Adaptador de salida que implementa {@link inspeccion.application.port.out.TerritorialClientPort}
+ * usando {@link org.springframework.web.client.RestTemplate}.
+ *
+ * <p>Se comunica con ms-territorial ({@code http://localhost:8082}) para verificar
+ * que un lote existe antes de crear una inspeccion. Captura excepciones HTTP
+ * (404, timeout) y las convierte en {@link java.util.Optional#empty()}.</p>
+ *
+ * <p>URL base configurable via {@code services.territorial.url} en application.yml.</p>
+ */
 
 @Slf4j
 @Component

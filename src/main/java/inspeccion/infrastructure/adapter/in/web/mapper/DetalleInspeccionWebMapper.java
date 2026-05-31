@@ -9,6 +9,10 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", uses = {DetallePlagaWebMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
+/**
+ * Mapper MapStruct entre {@link inspeccion.domain.model.DetalleInspeccion}
+ * y los DTOs de muestreo (DetalleInspeccionRequest / DetalleInspeccionResponse).
+ */
 public interface DetalleInspeccionWebMapper {
 
     @Mapping(target = "idDetalle", ignore = true)

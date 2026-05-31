@@ -12,6 +12,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+/**
+ * Adaptador JDBC que implementa {@link inspeccion.application.port.out.DetallePlagaRepositoryPort}.
+ *
+ * <p>Gestiona la tabla {@code DETALLE_PLAGA} con secuencia {@code SEQ_DETALLE_PLAGA}.
+ * Cada registro vincula un detalle de muestreo con una plaga del catalogo territorial
+ * ({@code ID_PLAGA}), registrando las plantas afectadas y el porcentaje de incidencia.</p>
+ */
 
 @Slf4j
 @Repository

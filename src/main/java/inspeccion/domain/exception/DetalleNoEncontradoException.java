@@ -1,4 +1,9 @@
 package inspeccion.domain.exception;
+/**
+ * Excepcion de dominio lanzada cuando no se encuentra un DetalleInspeccion o DetallePlaga.
+ *
+ * <p>RuntimeException no verificada. Convertida en HTTP 404 por el GlobalExceptionHandler.</p>
+ */
 
 public class DetalleNoEncontradoException extends RuntimeException {
 

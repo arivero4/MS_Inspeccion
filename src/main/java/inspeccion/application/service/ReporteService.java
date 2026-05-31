@@ -15,6 +15,15 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+/**
+ * Servicio de aplicacion que implementa {@link inspeccion.application.port.in.GenerarReporteUseCase}.
+ *
+ * <p>Genera reportes estadisticos sobre inspecciones: resumen por inspeccion,
+ * por lote, por periodo y listado de alertas criticas (incidencia {@literal >=} 30%).</p>
+ *
+ * <p>Usa {@link inspeccion.domain.service.IncidenciaCalculator} para calcular
+ * el indicador de riesgo global de cada inspeccion.</p>
+ */
 
 @Slf4j
 @Service

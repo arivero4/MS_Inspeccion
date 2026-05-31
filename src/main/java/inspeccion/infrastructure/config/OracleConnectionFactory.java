@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+/** Factory de conexiones Oracle XE 10g. Configura driver ojdbc14 para ms-inspeccion. */
 
 @Slf4j
 @Component

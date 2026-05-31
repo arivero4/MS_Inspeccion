@@ -8,6 +8,16 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * Entidad de dominio que representa un muestreo de campo dentro de una inspeccion.
+ *
+ * <p>Cada {@link InspeccionFitosanitaria} puede tener uno o varios muestreos.
+ * Cada muestreo registra el total de plantas inspeccionadas en un {@link #idLote}
+ * especifico y las plagas detectadas ({@link DetallePlaga}).</p>
+ *
+ * <p>Tabla Oracle: {@code DETALLE_INSPECCION} con FK {@code ID_INSPECCION}
+ * e {@code ID_LOTE}.</p>
+ */
 
 @Getter
 @Builder

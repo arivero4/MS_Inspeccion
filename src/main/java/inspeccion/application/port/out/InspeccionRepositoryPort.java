@@ -6,6 +6,13 @@ import inspeccion.domain.model.InspeccionFitosanitaria;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+/**
+ * Puerto de salida para la persistencia de inspecciones.
+ *
+ * <p>Abstrae el mecanismo de almacenamiento. Implementado por
+ * {@link inspeccion.infrastructure.adapter.out.persistence.repository.InspeccionRepositoryAdapter}
+ * usando JDBC puro (JdbcTemplate) sobre Oracle XE 10g.</p>
+ */
 
 public interface InspeccionRepositoryPort {
     InspeccionFitosanitaria guardar(InspeccionFitosanitaria inspeccion);

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
+/** Configuracion del DataSource Oracle XE 10g para ms-inspeccion usando HikariCP. */
 
 @Slf4j
 @Configuration

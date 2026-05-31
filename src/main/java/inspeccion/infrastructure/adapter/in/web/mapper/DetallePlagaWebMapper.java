@@ -6,6 +6,11 @@ import inspeccion.infrastructure.adapter.in.web.dto.DetallePlagaResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+/**
+ * Mapper MapStruct entre {@link inspeccion.domain.model.DetallePlaga}
+ * y los DTOs de plaga detectada.
+ * Mapea: {@code plagaId} del request -> {@code idPlaga} del dominio.
+ */
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DetallePlagaWebMapper {

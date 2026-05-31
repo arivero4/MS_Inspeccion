@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+/**
+ * Controlador REST para la generacion de reportes fitosanitarios.
+ *
+ * <p>Base URL: {@code /api/v1/reportes}. Provee reportes por inspeccion,
+ * por lote y por periodo con estadisticas de incidencia de plagas.</p>
+ */
 
 @Slf4j
 @RestController

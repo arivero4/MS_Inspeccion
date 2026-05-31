@@ -9,6 +9,11 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+/**
+ * Configuracion de Swagger/OpenAPI 3 para ms-inspeccion.
+ * Deshabilitado en perfil prod por seguridad.
+ * Acceso en dev: {@code http://localhost:8083/swagger-ui/index.html}.
+ */
 
 @Configuration
 public class SwaggerConfig {

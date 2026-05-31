@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+/**
+ * Adaptador JDBC que implementa {@link inspeccion.application.port.out.DetalleInspeccionRepositoryPort}.
+ *
+ * <p>Gestiona la tabla {@code DETALLE_INSPECCION} con secuencia {@code SEQ_DETALLE_INSPECCION}.
+ * Cada detalle pertenece a una inspeccion (FK {@code ID_INSPECCION}) y a un lote (FK {@code ID_LOTE}).</p>
+ */
 
 @Slf4j
 @Repository

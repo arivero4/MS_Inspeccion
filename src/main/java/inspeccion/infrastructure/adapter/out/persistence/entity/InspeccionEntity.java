@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+/** Entidad de persistencia que representa una fila de INSPECCION_FITOSANITARIA.
+ *  Usada por InspeccionRepositoryAdapter como modelo intermedio entre JDBC y el dominio. */
 
 @Data
 @Builder

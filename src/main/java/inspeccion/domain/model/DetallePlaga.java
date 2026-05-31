@@ -6,6 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+/**
+ * Entidad de dominio que representa una plaga detectada en un muestreo.
+ *
+ * <p>Registra el numero de plantas afectadas por una plaga especifica
+ * ({@link #idPlaga}, FK a la tabla PLAGA del esquema territorial) y el
+ * porcentaje de incidencia calculado ({@link #nivelIncidencia}).</p>
+ *
+ * <p>Los umbrales de severidad son los del ICA Colombia:
+ * BAJO {@literal <} 10%, MEDIO 10-29%, ALTO {@literal >=} 30%.</p>
+ *
+ * <p>Tabla Oracle: {@code DETALLE_PLAGA} con FKs {@code ID_DETALLE} e {@code ID_PLAGA}.</p>
+ */
 
 @Getter
 @Builder

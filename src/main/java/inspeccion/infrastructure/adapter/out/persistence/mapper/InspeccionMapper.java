@@ -8,6 +8,10 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", uses = {DetalleInspeccionMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
+/**
+ * Mapper MapStruct entre {@link inspeccion.domain.model.InspeccionFitosanitaria}
+ * y {@link inspeccion.infrastructure.adapter.out.persistence.entity.InspeccionEntity}.
+ */
 public interface InspeccionMapper {
 
     @Mapping(target = "detalles", ignore = true)

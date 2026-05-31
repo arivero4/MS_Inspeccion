@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/inspecciones/**", "/detalles/**", "/plagas/**", "/reportes/**")
                     .hasAnyRole("ASISTENTE_TECNICO", "INSPECTOR", "ADMIN", "SUPERVISOR", "ADMINISTRADOR", "PROPIETARIO", "PRODUCTOR")
+                .requestMatchers(HttpMethod.POST, "/inspecciones")
+                    .hasAnyRole("ASISTENTE_TECNICO", "INSPECTOR", "ADMIN", "ADMINISTRADOR", "PRODUCTOR", "PROPIETARIO")
                 .requestMatchers(HttpMethod.POST, "/inspecciones/**", "/detalles/**", "/plagas/**")
                     .hasAnyRole("ASISTENTE_TECNICO", "INSPECTOR", "ADMIN", "ADMINISTRADOR")
                 .requestMatchers(HttpMethod.PUT, "/inspecciones/**", "/detalles/**", "/plagas/**")

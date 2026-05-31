@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.List;
+/** DTO de salida con el resumen estadistico de un reporte fitosanitario. */
 
 @Data
 @Builder

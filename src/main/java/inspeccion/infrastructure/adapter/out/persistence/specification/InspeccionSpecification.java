@@ -5,6 +5,10 @@ import inspeccion.domain.enums.TipoInspeccion;
 import lombok.Builder;
 import lombok.Data;
 import java.time.LocalDate;
+/**
+ * Especificaciones de filtros dinamicos para consultas de inspecciones.
+ * Usadas en combinacion con JdbcTemplate para construir WHERE clauses dinamicas.
+ */
 
 @Data
 @Builder

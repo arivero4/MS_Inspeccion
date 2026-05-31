@@ -19,6 +19,19 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+/**
+ * Controlador REST que expone los endpoints del ciclo de vida de inspecciones.
+ *
+ * <p>Base URL: {@code /api/v1/inspecciones}. Incluye:</p>
+ * <ul>
+ *   <li>CRUD de inspecciones (POST, GET, PUT).</li>
+ *   <li>Transiciones de estado: PATCH /iniciar, /completar, /cancelar, /revision, /aprobar, /devolver.</li>
+ *   <li>Consultas por estado, lote, inspector y periodo.</li>
+ * </ul>
+ *
+ * <p>Todos los endpoints requieren autenticacion JWT.
+ * Las transiciones de aprobacion estan restringidas a rol ADMINISTRADOR.</p>
+ */
 
 @Slf4j
 @RestController
@@ -124,7 +137,7 @@ public class InspeccionController {
     @Operation(summary = "Cancelar una inspección")
     public ResponseEntity<InspeccionResponse> cancelar(
             @PathVariable Long id,
-            @RequestParam String motivo) {
+            @RequestParam(defaultValue = "Cancelada por el usuario") String motivo) {
         return ResponseEntity.ok(mapper.toResponse(registrarUseCase.cancelar(id, motivo)));
     }
 

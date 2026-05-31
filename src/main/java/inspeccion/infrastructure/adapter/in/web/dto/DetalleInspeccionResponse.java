@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
+/** DTO de salida con los datos del muestreo: plantas inspeccionadas, lote y lista de plagas. */
 
 @Data
 @Builder

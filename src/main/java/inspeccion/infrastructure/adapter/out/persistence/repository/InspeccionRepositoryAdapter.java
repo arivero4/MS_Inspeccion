@@ -20,6 +20,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+/**
+ * Adaptador JDBC que implementa {@link inspeccion.application.port.out.InspeccionRepositoryPort}
+ * usando {@link org.springframework.jdbc.core.JdbcTemplate} sobre Oracle XE 10g.
+ *
+ * <p>Usa SQL nativo con las tablas {@code INSPECCION_FITOSANITARIA} y
+ * la secuencia {@code SEQ_INSPECCION} (asignada por trigger {@code TRG_I2_INSP}).</p>
+ *
+ * <p>Lee el campo {@code ID_LOTE} con tratamiento especial de NULL
+ * ({@code rs.wasNull()}) para evitar retornar 0 en lugar de null.</p>
+ */
 
 @Slf4j
 @Repository
@@ -32,7 +42,7 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
     private final InspeccionMapper mapper;
 
     private static final String SELECT_BASE =
-        "SELECT ID_INSPECCION, CODIGO_ICA, FECHA_INSPECCION, ESTADO, " +
+        "SELECT ID_LOTE, ID_INSPECCION, CODIGO_ICA, FECHA_INSPECCION, ESTADO, " +
         "TIPO, ID_GRUPO, FECHA_ACTUALIZACION, OBSERVACIONES FROM INSPECCION_FITOSANITARIA";
 
     @Override
@@ -40,8 +50,8 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
         Long id = jdbcTemplate.queryForObject("SELECT SEQ_INSPECCION.NEXTVAL FROM DUAL", Long.class);
         String sql = "INSERT INTO INSPECCION_FITOSANITARIA " +
             "(ID_INSPECCION, CODIGO_ICA, FECHA_INSPECCION, ESTADO, " +
-            "TIPO, ID_GRUPO, FECHA_ACTUALIZACION, OBSERVACIONES) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            "TIPO, ID_GRUPO, FECHA_ACTUALIZACION, OBSERVACIONES, ID_LOTE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         LocalDateTime ahora = LocalDateTime.now();
         // codigoIca comes from numeroInspeccion if set, else generate one
@@ -60,7 +70,8 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
             tipo,
             idGrupo,
             Timestamp.valueOf(ahora),
-            inspeccion.getObservaciones());
+            inspeccion.getObservaciones(),
+            inspeccion.getIdLote());
 
         return buscarPorId(id).orElseThrow();
     }
@@ -69,7 +80,7 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
     public InspeccionFitosanitaria actualizar(InspeccionFitosanitaria inspeccion) {
         String sql = "UPDATE INSPECCION_FITOSANITARIA SET " +
             "FECHA_INSPECCION = ?, TIPO = ?, ESTADO = ?, " +
-            "OBSERVACIONES = ?, FECHA_ACTUALIZACION = ? " +
+            "OBSERVACIONES = ?, FECHA_ACTUALIZACION = ?, ID_LOTE = ? " +
             "WHERE ID_INSPECCION = ?";
 
         jdbcTemplate.update(sql,
@@ -78,6 +89,7 @@ public class InspeccionRepositoryAdapter implements InspeccionRepositoryPort {
             inspeccion.getEstado() != null ? inspeccion.getEstado().name() : null,
             inspeccion.getObservaciones(),
             Timestamp.valueOf(LocalDateTime.now()),
+            inspeccion.getIdLote(),
             inspeccion.getIdInspeccion());
 
         return buscarPorId(inspeccion.getIdInspeccion()).orElseThrow();

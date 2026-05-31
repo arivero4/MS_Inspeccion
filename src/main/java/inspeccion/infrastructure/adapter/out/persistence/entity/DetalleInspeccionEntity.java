@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+/** Entidad de persistencia para la tabla DETALLE_INSPECCION (muestreo de campo). */
 
 @Data
 @Builder

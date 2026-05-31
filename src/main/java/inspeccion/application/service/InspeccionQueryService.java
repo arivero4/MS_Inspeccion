@@ -11,6 +11,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+/**
+ * Servicio de consulta de solo lectura que implementa
+ * {@link inspeccion.application.port.in.ConsultarInspeccionUseCase}.
+ *
+ * <p>Delega todas las operaciones directamente al repositorio sin logica de negocio adicional.
+ * Separado de {@link InspeccionService} para mantener la responsabilidad unica.</p>
+ */
 
 @Slf4j
 @Service

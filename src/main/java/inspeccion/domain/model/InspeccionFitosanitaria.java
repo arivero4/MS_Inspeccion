@@ -2,6 +2,28 @@ package inspeccion.domain.model;
 
 import inspeccion.domain.enums.EstadoInspeccion;
 import inspeccion.domain.enums.TipoInspeccion;
+
+/**
+ * Agregado raiz del dominio de inspecciones fitosanitarias.
+ *
+ * <p>Representa una inspeccion fitosanitaria sobre un lote de cultivo
+ * hortifruticola. Encapsula el ciclo de vida completo y las transiciones
+ * de estado del flujo del ICA.</p>
+ *
+ * <p><b>Flujo de estados:</b></p>
+ * <pre>
+ *   PROGRAMADA -[iniciar]->        EN_PROCESO
+ *   EN_PROCESO -[completar]->      COMPLETADA
+ *   COMPLETADA -[revision]->       PENDIENTE_REVISION
+ *   PEND_REV   -[aprobar]->        APROBADA
+ *   PEND_REV   -[devolver]->       EN_PROCESO
+ *   PROGRAMADA -[cancelar]->       CANCELADA
+ *   EN_PROCESO -[cancelar]->       CANCELADA
+ * </pre>
+ *
+ * <p>Inmutable en transiciones: cada metodo devuelve una nueva instancia via Builder.</p>
+ * <p>Tabla Oracle: {@code INSPECCION_FITOSANITARIA}.</p>
+ */
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+/** DTO de salida con la plaga detectada: idPlaga, plantasAfectadas, nivelIncidencia y nivelSeveridad. */
 
 @Data
 @Builder

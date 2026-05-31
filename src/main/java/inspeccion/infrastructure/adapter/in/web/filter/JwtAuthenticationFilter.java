@@ -16,6 +16,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * Filtro de autenticacion JWT para ms-inspeccion.
+ *
+ * <p>Intercepta cada request HTTP, extrae el token Bearer del header
+ * {@code Authorization}, lo valida con la clave secreta compartida
+ * y puebla el {@code SecurityContext} de Spring con el rol del usuario
+ * (claim {@code grupos} del JWT).</p>
+ *
+ * <p>La clave JWT debe ser identica a la configurada en ms-usuarios.</p>
+ */
 
 @Slf4j
 @Component

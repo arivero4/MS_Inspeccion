@@ -20,6 +20,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+/**
+ * Controlador REST para la gestion de muestreos y plagas detectadas.
+ *
+ * <p>Endpoints principales:</p>
+ * <ul>
+ *   <li>POST {@code /inspecciones/{id}/detalles} — registrar conteo de plantas.</li>
+ *   <li>GET  {@code /inspecciones/{id}/detalles} — listar muestreos de una inspeccion.</li>
+ *   <li>POST {@code /detalles/{id}/plagas} — registrar plaga detectada con incidencia.</li>
+ *   <li>GET  {@code /detalles/{id}/plagas} — listar plagas de un muestreo (incluye idPlaga).</li>
+ * </ul>
+ */
 
 @Slf4j
 @RestController

@@ -1,0 +1,55 @@
+# ============================================================
+# Configuración de PRODUCCIÓN — ms-inspeccion
+# Activar con: -Dspring.profiles.active=prod
+# Variables de entorno OBLIGATORIAS:
+#   DB_URL, DB_USERNAME, DB_PASSWORD, JWT_SECRET,
+#   SERVER_PORT, TERRITORIAL_URL
+# ============================================================
+
+spring:
+  datasource:
+    hikari:
+      jdbcUrl:          ${DB_URL}
+      username:         ${DB_USERNAME}
+      password:         ${DB_PASSWORD}
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      connection-test-query: SELECT 1 FROM DUAL
+
+  flyway:
+    enabled: false
+
+server:
+  port: ${SERVER_PORT:8083}
+  compression:
+    enabled: true
+    mime-types: application/json
+  error:
+    include-message: never
+    include-stacktrace: never
+
+services:
+  territorial:
+    url: ${TERRITORIAL_URL:http://localhost:8082}
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  level:
+    inspeccion: INFO
+    org.springframework.jdbc.core.JdbcTemplate: WARN
+    org.springframework.jdbc.core.StatementCreatorUtils: WARN
+    org.springframework.security: WARN
+    root: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

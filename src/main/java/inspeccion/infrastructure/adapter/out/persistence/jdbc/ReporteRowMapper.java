@@ -12,6 +12,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+/**
+ * RowMapper JDBC para consultas agregadas de reportes.
+ * Mapea las columnas de las consultas estadisticas al DTO de reporte.
+ */
 
 @Component
 public class ReporteRowMapper implements RowMapper<Map<String, Object>> {

@@ -5,6 +5,13 @@ import inspeccion.domain.model.DetallePlaga;
 
 import java.util.List;
 import java.util.Optional;
+/**
+ * Puerto de entrada para la gestion de muestreos y plagas detectadas.
+ *
+ * <p>Maneja el CRUD de {@link inspeccion.domain.model.DetalleInspeccion}
+ * y {@link inspeccion.domain.model.DetallePlaga}.
+ * Implementado por {@link inspeccion.application.service.DetalleInspeccionService}.</p>
+ */
 
 public interface GestionarDetalleUseCase {
     DetalleInspeccion agregarDetalle(Long idInspeccion, DetalleInspeccion detalle);

@@ -16,6 +16,16 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+/**
+ * Servicio de aplicacion que implementa {@link inspeccion.application.port.in.GestionarDetalleUseCase}.
+ *
+ * <p>Gestiona los muestreos de campo y las plagas detectadas. Calcula automaticamente
+ * el porcentaje de incidencia usando {@link inspeccion.domain.service.IncidenciaCalculator}
+ * al registrar cada plaga.</p>
+ *
+ * <p>Valida que la inspeccion este en estado {@code EN_PROCESO} antes de
+ * permitir agregar detalles de muestreo.</p>
+ */
 
 @Slf4j
 @Service

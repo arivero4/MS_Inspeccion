@@ -13,6 +13,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+/**
+ * Servicio de aplicacion que implementa {@link inspeccion.application.port.in.RegistrarInspeccionUseCase}.
+ *
+ * <p>Orquesta el ciclo de vida de las inspecciones fitosanitarias:
+ * validacion del lote con ms-territorial, generacion del codigo ICA,
+ * y todas las transiciones de estado (iniciar, completar, cancelar, aprobar, etc.).</p>
+ *
+ * <p>Usa {@link inspeccion.application.port.out.TerritorialClientPort} para verificar
+ * que el lote existe antes de registrar la inspeccion.</p>
+ */
 
 @Slf4j
 @Service

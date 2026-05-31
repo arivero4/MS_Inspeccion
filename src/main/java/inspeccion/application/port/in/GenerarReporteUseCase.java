@@ -5,6 +5,12 @@ import inspeccion.domain.model.InspeccionFitosanitaria;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+/**
+ * Puerto de entrada para la generacion de reportes estadisticos.
+ *
+ * <p>Genera resumenes por inspeccion, por lote, por periodo y alertas criticas.
+ * Implementado por {@link inspeccion.application.service.ReporteService}.</p>
+ */
 
 public interface GenerarReporteUseCase {
     Map<String, Object> generarReportePorInspeccion(Long idInspeccion);

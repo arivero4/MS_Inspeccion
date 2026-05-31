@@ -4,6 +4,12 @@ import inspeccion.domain.model.DetallePlaga;
 
 import java.util.List;
 import java.util.Optional;
+/**
+ * Puerto de salida para la persistencia de plagas detectadas en muestreos.
+ *
+ * <p>Implementado por
+ * {@link inspeccion.infrastructure.adapter.out.persistence.repository.DetallePlagaRepositoryAdapter}.</p>
+ */
 
 public interface DetallePlagaRepositoryPort {
     DetallePlaga guardar(DetallePlaga plaga);

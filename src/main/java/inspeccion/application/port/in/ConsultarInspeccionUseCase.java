@@ -6,6 +6,12 @@ import inspeccion.domain.model.InspeccionFitosanitaria;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+/**
+ * Puerto de entrada para consultas de solo lectura sobre inspecciones.
+ *
+ * <p>Provee busqueda por ID, numero ICA, estado, lote, inspector y periodo.
+ * Implementado por {@link inspeccion.application.service.InspeccionQueryService}.</p>
+ */
 
 public interface ConsultarInspeccionUseCase {
     Optional<InspeccionFitosanitaria> buscarPorId(Long idInspeccion);

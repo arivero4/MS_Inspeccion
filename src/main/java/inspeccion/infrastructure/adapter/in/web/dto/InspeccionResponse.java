@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+/** DTO de salida con los datos completos de una inspeccion: estado, tipo, lote, AT. */
 
 @Data
 @Builder

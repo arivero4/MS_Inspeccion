@@ -13,6 +13,10 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
+/**
+ * Adaptador de seguridad que valida tokens JWT en ms-inspeccion.
+ * Comparte la misma clave secreta con ms-usuarios para verificar firmas HMAC-SHA256.
+ */
 
 @Slf4j
 @Component

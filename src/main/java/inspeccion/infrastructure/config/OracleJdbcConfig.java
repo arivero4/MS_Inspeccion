@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
+/** Configuracion JDBC adicional para compatibilidad con Oracle XE 10g en ms-inspeccion. */
 
 @Configuration
 public class OracleJdbcConfig {

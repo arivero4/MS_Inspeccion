@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+/** Entidad de persistencia para la tabla DETALLE_PLAGA (plaga detectada en muestreo). */
 
 @Data
 @Builder

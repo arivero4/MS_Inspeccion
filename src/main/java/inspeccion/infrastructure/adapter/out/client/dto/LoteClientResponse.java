@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+/**
+ * DTO de infraestructura que mapea la respuesta del endpoint de lotes de ms-territorial.
+ * Convertido a {@link inspeccion.application.dto.LoteInfo} por {@link TerritorialClientAdapter}.
+ */
 
 @Data
 @Builder

@@ -5,6 +5,20 @@ import inspeccion.domain.model.DetallePlaga;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+/**
+ * Servicio de dominio que centraliza el calculo de incidencia fitosanitaria.
+ *
+ * <p>Implementa los algoritmos de calculo de porcentaje de incidencia
+ * y clasificacion de nivel de riesgo segun los umbrales del ICA Colombia:</p>
+ * <ul>
+ *   <li>BAJO:  incidencia {@literal <} {@value #UMBRAL_MEDIO}%.</li>
+ *   <li>MEDIO: {@value #UMBRAL_MEDIO}% {@literal <=} incidencia {@literal <} {@value #UMBRAL_ALTO}%.</li>
+ *   <li>ALTO:  incidencia {@literal >=} {@value #UMBRAL_ALTO}%.</li>
+ * </ul>
+ *
+ * <p>Ademas calcula el indicador de riesgo global de una inspeccion ponderando
+ * la incidencia promedio (70%) y las plagas criticas detectadas (30%).</p>
+ */
 
 @Component
 public class IncidenciaCalculator {

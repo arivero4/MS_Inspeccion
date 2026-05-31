@@ -9,6 +9,11 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", uses = {DetalleInspeccionWebMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
+/**
+ * Mapper MapStruct entre {@link inspeccion.domain.model.InspeccionFitosanitaria}
+ * y los DTOs HTTP {@link inspeccion.infrastructure.adapter.in.web.dto.InspeccionRequest}
+ * / {@link inspeccion.infrastructure.adapter.in.web.dto.InspeccionResponse}.
+ */
 public interface InspeccionWebMapper {
 
     @Mapping(target = "idInspeccion", ignore = true)

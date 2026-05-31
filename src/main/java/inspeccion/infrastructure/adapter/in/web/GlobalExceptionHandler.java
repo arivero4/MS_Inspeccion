@@ -14,6 +14,17 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+/**
+ * Manejador global de excepciones para ms-inspeccion.
+ *
+ * <p>Captura excepciones de dominio y las convierte en respuestas HTTP estructuradas:</p>
+ * <ul>
+ *   <li>{@code InspeccionNoEncontradaException} / {@code DetalleNoEncontradoException} -> HTTP 404.</li>
+ *   <li>{@code IllegalStateException} (transicion de estado invalida) -> HTTP 400.</li>
+ *   <li>{@code IllegalArgumentException} (datos invalidos) -> HTTP 400.</li>
+ *   <li>Otras excepciones -> HTTP 500.</li>
+ * </ul>
+ */
 
 @Slf4j
 @RestControllerAdvice

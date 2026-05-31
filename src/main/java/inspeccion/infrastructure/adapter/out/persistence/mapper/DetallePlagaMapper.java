@@ -5,6 +5,10 @@ import inspeccion.infrastructure.adapter.out.persistence.entity.DetallePlagaEnti
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+/**
+ * Mapper MapStruct entre {@link inspeccion.domain.model.DetallePlaga}
+ * y {@link inspeccion.infrastructure.adapter.out.persistence.entity.DetallePlagaEntity}.
+ */
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DetallePlagaMapper {
